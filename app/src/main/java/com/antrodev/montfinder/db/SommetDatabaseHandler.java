@@ -47,6 +47,7 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
                 + KEY_ALTITUDE + " int"
                 + ")";
         db.execSQL(CREATE_SOMMETS_TABLE);
+        initializeValues();
     }
 
     @Override
