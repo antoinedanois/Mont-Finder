@@ -1,8 +1,13 @@
 package com.antrodev.montfinder.db;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Leonardo on 11/01/2016.
@@ -24,7 +29,7 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
     public static boolean initialized = false;
 
 
-    public static SommetDatabaseHandler getGestionnaireBaseSommets(Context context) {
+    public static SommetDatabaseHandler getSommetDatabaseHandler(Context context) {
         if (created == false){
             gbs = new SommetDatabaseHandler(context);
             created = true;
@@ -47,7 +52,7 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
                 + KEY_ALTITUDE + " int"
                 + ")";
         db.execSQL(CREATE_SOMMETS_TABLE);
-        initializeValues();
+
     }
 
     @Override
@@ -70,6 +75,7 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
             addSommet("INSERT INTO sommets VALUES (1116621810, '6.84486789904718', '47.8224908948974', 'Ballon d''Alsace', 1247);");
             addSommet("INSERT INTO sommets VALUES (938282869, '6.7736388990571', '47.7672319948997', 'Planche des Belles Filles', 1148);");
             addSommet("INSERT INTO sommets VALUES (1762485578, '6.92214789903643', '47.7727801948995', 'Le Baerenkopf', 1074);");
+            initialized=true;
         }
     }
 
@@ -78,5 +84,20 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
         SQLiteDatabase db=this.getReadableDatabase();
         db.execSQL(query);
         return 0;
+    }
+
+    public List<Sommet> getSommets(){
+        String query="SELECT * FROM sommets;";
+        List<Sommet> values=new ArrayList<>();
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cursor=db.query(TABLE_SOMMETS,new String[]{KEY_ID,KEY_LONGITUDE,KEY_LATITUDE,KEY_NOM,KEY_ALTITUDE},null,null,null,null,null);
+        if(cursor!=null){
+            cursor.moveToFirst();
+            do{
+                Sommet sommet = new Sommet(Long.valueOf(cursor.getString(0)), Double.valueOf(cursor.getString(1)),Double.valueOf(cursor.getString(2)), cursor.getString(3), Integer.valueOf(cursor.getString(4)));
+                values.add(sommet);
+            } while(cursor.moveToNext());
+        }
+        return values;
     }
 }
