@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
- Copyright 2015 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright 2014 The Android Open Source Project
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,5 +14,5 @@
  limitations under the License.
 -->
 <resources>
-    <color name="control_background">#cc4285f4</color>
+    <style name="MaterialTheme" parent="android:Theme.Material.Light.NoActionBar.Fullscreen" />
 </resources>
