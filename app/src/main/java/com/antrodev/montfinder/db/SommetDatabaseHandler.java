@@ -39,18 +39,21 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
 
     private SommetDatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.onCreate(this.getWritableDatabase());
     }
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_SOMMETS_TABLE = "CREATE TABLE " + TABLE_SOMMETS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY,"
+
+
+        String CREATE_SOMMETS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_SOMMETS + " ("
+                + KEY_ID + " INT PRIMARY KEY,"
                 + KEY_LONGITUDE + " varchar(16),"
                 + KEY_LATITUDE + " varchar(16),"
                 + KEY_NOM + " varchar,"
-                + KEY_ALTITUDE + " int"
-                + ")";
+                + KEY_ALTITUDE + " int)";
+
         db.execSQL(CREATE_SOMMETS_TABLE);
 
     }
@@ -58,6 +61,7 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SOMMETS);
+        System.out.println("YOLOOOOO");
         onCreate(db);
         initialized = false;
     }
