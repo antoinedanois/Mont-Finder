@@ -10,8 +10,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        int coucouuuu = 0;
 
-        System.out.println("choucroute");
+
     }
 }
