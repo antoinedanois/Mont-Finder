@@ -22,8 +22,7 @@ public class MainActivity extends Activity {
 
 
             dbMan=SommetDatabaseHandler.getSommetDatabaseHandler(this);
-
-            //dbMan.initializeValues();
+            dbMan.initializeValues();
             sommets=dbMan.getSommets();
 
 

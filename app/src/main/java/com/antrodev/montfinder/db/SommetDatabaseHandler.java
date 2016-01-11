@@ -1,6 +1,7 @@
 package com.antrodev.montfinder.db;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -23,10 +24,12 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
     private static final String KEY_LATITUDE="latitude";
     private static final String KEY_NOM="nom";
     private static final String KEY_ALTITUDE="altitude";
+    private static final String KEY_INITIALIZED="initialized";
     public static SommetDatabaseHandler gbs = null;
 
     public static boolean created = false;
     public static boolean initialized = false;
+    private Context context;
 
 
     public static SommetDatabaseHandler getSommetDatabaseHandler(Context context) {
@@ -39,6 +42,8 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
 
     private SommetDatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context=context;
+        readPreferences();
         this.onCreate(this.getWritableDatabase());
     }
 
@@ -61,7 +66,6 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SOMMETS);
-        System.out.println("YOLOOOOO");
         onCreate(db);
         initialized = false;
     }
@@ -80,6 +84,7 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
             addSommet("INSERT INTO sommets VALUES (938282869, '6.7736388990571', '47.7672319948997', 'Planche des Belles Filles', 1148);");
             addSommet("INSERT INTO sommets VALUES (1762485578, '6.92214789903643', '47.7727801948995', 'Le Baerenkopf', 1074);");
             initialized=true;
+            savePreferences();
         }
     }
 
@@ -103,5 +108,15 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
             } while(cursor.moveToNext());
         }
         return values;
+    }
+
+    private void savePreferences(){
+        SharedPreferences.Editor editor=context.getSharedPreferences("Settings",Context.MODE_PRIVATE).edit();
+        editor.putBoolean(KEY_INITIALIZED,initialized);
+    }
+
+    private void readPreferences(){
+        SharedPreferences settings=context.getSharedPreferences("Settings",Context.MODE_PRIVATE);
+        this.initialized=settings.getBoolean(KEY_INITIALIZED,false);
     }
 }
