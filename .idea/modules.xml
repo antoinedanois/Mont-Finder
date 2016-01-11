@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MontFinder.iml" filepath="$PROJECT_DIR$/MontFinder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Mont-Finder.iml" filepath="$PROJECT_DIR$/Mont-Finder.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
