@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.antrodev.montfinder.db.Sommet;
 import com.antrodev.montfinder.db.SommetDatabaseHandler;
+import com.antrodev.montfinder.db.SommetInsertionTask;
 
 import org.w3c.dom.Text;
 
@@ -37,6 +38,7 @@ public class MainActivity extends Activity {
 
     SommetDatabaseHandler dbMan;
     List<Sommet> sommets;
+    BroadcastReceiver DBStatusReceiver;
     LocalisationGPS lGPS = null;
     BroadcastReceiver br;
     OrientationPrecise op;
@@ -72,13 +74,7 @@ public class MainActivity extends Activity {
         dbMan=SommetDatabaseHandler.getSommetDatabaseHandler(this);
 
         dbMan.initializeValues();
-        sommets=dbMan.getSommets();
 
-
-
-        for(int i=0; i<sommets.size(); i++){
-            System.out.println("FUHGQDFLJK " + sommets.get(i).getNomSommet());
-        }
 
 
         if (null == savedInstanceState) {
@@ -110,6 +106,12 @@ public class MainActivity extends Activity {
             }
         };
 
+        DBStatusReceiver=new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                initializeSommets();
+            }
+        };
 
 
 
@@ -119,6 +121,14 @@ public class MainActivity extends Activity {
                 showLocation(intent);
             }
         };
+    }
+
+    private void initializeSommets(){
+        sommets=dbMan.getSommets();
+
+        for(int i=0; i<sommets.size(); i++){
+            System.out.println("FUHGQDFLJK " + sommets.get(i).getNomSommet());
+        }
     }
 
     private void updateSommets(){
@@ -227,6 +237,7 @@ public class MainActivity extends Activity {
         tvLatLong.setText("Localisation par GPS en cours...");
 
         registerReceiver(orientationReceiver, new IntentFilter(OrientationPrecise.MESSAGE_ORIENTATION));
+        registerReceiver(DBStatusReceiver,new IntentFilter(SommetInsertionTask.MESSAGE_TYPE));
         op.start();
     }
 
@@ -236,6 +247,7 @@ public class MainActivity extends Activity {
         unregisterReceiver(br);
 
         unregisterReceiver(orientationReceiver);
+        unregisterReceiver(DBStatusReceiver);
         op.stop();
     }
 

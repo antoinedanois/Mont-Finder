@@ -9,11 +9,14 @@ import android.os.AsyncTask;
  * Created by Leonardo on 12/01/2016.
  */
 public class SommetInsertionTask extends AsyncTask<SommetDatabaseHandler,String,String> {
-
+    public final static String MESSAGE_TYPE = "DBstatus";
+    final static String KEY_STATUS = "status_ins";
+    private Context context;
     private SommetDatabaseHandler db;
 
     public SommetInsertionTask(Context context){
         super();
+        this.context=context;
     }
 
     @Override
@@ -57,5 +60,9 @@ public class SommetInsertionTask extends AsyncTask<SommetDatabaseHandler,String,
         super.onPostExecute(s);
         SommetDatabaseHandler.initialized=true;
         db.savePreferences();
+
+        Intent i=new Intent(MESSAGE_TYPE);
+        i.putExtra(KEY_STATUS, true);
+        context.sendBroadcast(i);
     }
 }
