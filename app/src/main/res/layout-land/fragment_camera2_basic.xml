@@ -87,7 +87,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"
         android:src="@drawable/arrow"
-        android:layout_alignParentEnd="false" />
+        android:layout_alignParentEnd="false"
+        android:visibility="invisible" />
 
     <ImageView
         android:layout_width="120dp"
@@ -96,7 +97,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"
-        android:src="@drawable/arrow" />
+        android:src="@drawable/arrow"
+        android:visibility="invisible" />
 
     <ImageView
         android:layout_width="120dp"
@@ -105,7 +107,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"
-        android:src="@drawable/arrow" />
+        android:src="@drawable/arrow"
+        android:visibility="invisible" />
 
     <ImageView
         android:layout_width="120dp"
@@ -114,7 +117,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"
-        android:src="@drawable/arrow" />
+        android:src="@drawable/arrow"
+        android:visibility="invisible" />
 
     <ImageView
         android:layout_width="120dp"
@@ -123,7 +127,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"
-        android:src="@drawable/arrow" />
+        android:src="@drawable/arrow"
+        android:visibility="invisible" />
 
     <ImageView
         android:layout_width="120dp"

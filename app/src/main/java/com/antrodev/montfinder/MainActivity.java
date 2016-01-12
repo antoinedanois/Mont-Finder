@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,6 +48,8 @@ public class MainActivity extends Activity {
     Location localisation = null;
     float[] orientation;
     int xAxisDegrees;
+    Animation animationNord = null;
+    Animation animationNordCote = null;
 
     ImageView ivArrowNord = null;
     ImageView ivArrow = null;
@@ -65,6 +69,12 @@ public class MainActivity extends Activity {
     boolean verifArrow3 = false;
     boolean verifArrow4 = false;
     boolean verifArrow5 = false;
+
+    float locMontagne1 = 0;
+    float locMontagne2 = 0;
+    float locMontagne3 = 0;
+    float locMontagne4 = 0;
+    float locMontagne5 = 0;
 
     TextView tvLatLong = null;
     ProgressBar progressBar = null;
@@ -149,96 +159,205 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void updateSommets(){
+    private void updateSommets() {
+
+
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         int tailleEcran = size.x;
 
-        int sizeImage = ivArrow.getWidth()/2;
+        boolean passageAutorise1 = false;
+        boolean passageAutorise2 = false;
+        boolean passageAutorise3 = false;
+        boolean passageAutorise4 = false;
+        boolean passageAutorise5 = false;
+        boolean placeLibre = false;
+        boolean tourComplet = false;
+
+        int sizeImage = ivArrow.getWidth() / 2;
 
 
-        for(int i=0; i<sommets.size(); i++){
-
-
-
-            Location loc = new Location(sommets.get(i).getNomSommet());
-
-            loc.setLatitude(sommets.get(i).getLatitude());
-            loc.setLongitude(sommets.get(i).getLongitude());
+        for (int i = 0; i < sommets.size(); i++) {
 
 
             if (localisation != null) {
 
                 tvLatLong.setText("Boussole = " + xAxisDegrees);
 
-                float locMontagne = localisation.bearingTo(loc);
 
-                if(verifArrow1 == false){
-                    verifArrow1 = true;
-                    tvArrow1.setVisibility(View.VISIBLE);
-                }else if(verifArrow2 == false){
-                    verifArrow2 = true;
-                    tvArrow2.setVisibility(View.VISIBLE);
-                }else if(verifArrow3 == false){
-                    verifArrow3 = true;
-                    tvArrow3.setVisibility(View.VISIBLE);
-                }else if(verifArrow4 == false){
-                    verifArrow4 = true;
-                    tvArrow4.setVisibility(View.VISIBLE);
-                }else if(verifArrow5 == false){
-                    verifArrow5 = true;
-                    tvArrow5.setVisibility(View.VISIBLE);
+                if (verifArrow1 == false) {
+                    Location loc1 = new Location(sommets.get(i).getNomSommet());
+
+
+                    loc1.setLatitude(sommets.get(i).getLatitude());
+                    loc1.setLongitude(sommets.get(i).getLongitude());
+
+                    locMontagne1 = localisation.bearingTo(loc1);
+
+                    if (xAxisDegrees - locMontagne1 >= -30 && xAxisDegrees + locMontagne1 <= 30) {
+
+                        verifArrow1 = true;
+                        ivArrow.setVisibility(View.VISIBLE);
+                        tvArrow1.setVisibility(View.VISIBLE);
+
+                        passageAutorise1 = true;
+                    } else {
+                        placeLibre = true;
+                    }
+                } else if (verifArrow2 == false) {
+
+                    Location loc2 = new Location(sommets.get(i).getNomSommet());
+
+
+                    loc2.setLatitude(sommets.get(i).getLatitude());
+                    loc2.setLongitude(sommets.get(i).getLongitude());
+
+                    locMontagne2 = localisation.bearingTo(loc2);
+
+                    if (xAxisDegrees - locMontagne2 >= -30 && xAxisDegrees + locMontagne2 <= 30) {
+
+                        verifArrow2 = true;
+                        ivArrow2.setVisibility(View.VISIBLE);
+                        tvArrow2.setVisibility(View.VISIBLE);
+                        passageAutorise2 = true;
+                    } else {
+                        placeLibre = true;
+                    }
+
+                } else if (verifArrow3 == false) {
+                    Location loc3 = new Location(sommets.get(i).getNomSommet());
+
+
+                    loc3.setLatitude(sommets.get(i).getLatitude());
+                    loc3.setLongitude(sommets.get(i).getLongitude());
+
+                    locMontagne3 = localisation.bearingTo(loc3);
+
+                    if (xAxisDegrees - locMontagne3 >= -30 && xAxisDegrees + locMontagne3 <= 30) {
+                        verifArrow3 = true;
+                        ivArrow3.setVisibility(View.VISIBLE);
+                        tvArrow3.setVisibility(View.VISIBLE);
+                        passageAutorise3 = true;
+                    } else {
+                        placeLibre = true;
+                    }
+                } else if (verifArrow4 == false) {
+                    Location loc4 = new Location(sommets.get(i).getNomSommet());
+
+
+                    loc4.setLatitude(sommets.get(i).getLatitude());
+                    loc4.setLongitude(sommets.get(i).getLongitude());
+
+                    locMontagne4 = localisation.bearingTo(loc4);
+
+
+                    if (xAxisDegrees - locMontagne4 >= -30 && xAxisDegrees + locMontagne4 <= 30) {
+
+                        verifArrow4 = true;
+                        ivArrow4.setVisibility(View.VISIBLE);
+                        tvArrow4.setVisibility(View.VISIBLE);
+                        passageAutorise4 = true;
+                    } else {
+                        placeLibre = true;
+                    }
+
+                } else if (verifArrow5 == false) {
+                    Location loc5 = new Location(sommets.get(i).getNomSommet());
+
+
+                    loc5.setLatitude(sommets.get(i).getLatitude());
+                    loc5.setLongitude(sommets.get(i).getLongitude());
+
+                    locMontagne5 = localisation.bearingTo(loc5);
+
+                    if (xAxisDegrees - locMontagne5 >= -30 && xAxisDegrees + locMontagne5 <= 30) {
+                        verifArrow5 = true;
+                        ivArrow5.setVisibility(View.VISIBLE);
+                        tvArrow5.setVisibility(View.VISIBLE);
+                        passageAutorise5 = true;
+                    } else {
+                        placeLibre = true;
+                    }
+
                 }
 
 
-                if(xAxisDegrees-locMontagne >= -30 && xAxisDegrees+locMontagne <= 30) {
-                    if (verifArrow1 == true) {
-                        ivArrow.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
-                        tvArrow1.setText(sommets.get(i).getNomSommet());
-                        tvArrow1.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                if(verifArrow1 || verifArrow2 || verifArrow3 || verifArrow4 || verifArrow5){
+                    placeLibre = false;
+                }
 
+
+
+                if (placeLibre == false) {
+                    if (verifArrow1 == true && passageAutorise1 == true) {
+                        ivArrow.setX(((xAxisDegrees - locMontagne1) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        tvArrow1.setText("1 = " + sommets.get(0).getNomSommet());
+                        tvArrow1.setX(((xAxisDegrees - locMontagne1) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        //System.out.println("1 = " + sommets.get(i).getNomSommet());
+                        passageAutorise1 = false;
+                    } else if (verifArrow2 == true && passageAutorise2 == true) {
+                        ivArrow2.setX(((xAxisDegrees - locMontagne2) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        tvArrow2.setText("2 = " + sommets.get(i).getNomSommet());
+                        tvArrow2.setX(((xAxisDegrees - locMontagne2) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        passageAutorise2 = false;
+
+                        //System.out.println("2 = " + sommets.get(23).getNomSommet());
+                    } else if (verifArrow3 == true && passageAutorise3 == true) {
+                        ivArrow3.setX(((xAxisDegrees - locMontagne3) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        tvArrow3.setText("3 = " + sommets.get(i).getNomSommet());
+                        tvArrow3.setX(((xAxisDegrees - locMontagne3) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        passageAutorise3 = false;
+                    } else if (verifArrow4 == true && passageAutorise4 == true) {
+                        ivArrow4.setX(((xAxisDegrees - locMontagne4) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        tvArrow4.setText("4 = " + sommets.get(i).getNomSommet());
+                        tvArrow4.setX(((xAxisDegrees - locMontagne4) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+
+                        passageAutorise4 = false;
+                    } else if (verifArrow5 == true && passageAutorise5 == true) {
+                        ivArrow5.setX(((xAxisDegrees - locMontagne5) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        tvArrow5.setText("5 = " + sommets.get(i).getNomSommet());
+                        tvArrow5.setX(((xAxisDegrees - locMontagne5) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+
+                        passageAutorise5 = false;
+                        tourComplet = true;
+                    }
+                }
+
+                if (tourComplet == true) {
+                    if (verifArrow1 == true) {
+                        verifArrow1 = false;
+                        passageAutorise1 = false;
                     }
                     if (verifArrow2 == true) {
-                        ivArrow2.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
-                        tvArrow2.setText(sommets.get(i).getNomSommet());
-                        tvArrow2.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        verifArrow2 = false;
+                        passageAutorise2 = false;
                     }
                     if (verifArrow3 == true) {
-                        ivArrow3.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
-                        tvArrow3.setText(sommets.get(i).getNomSommet());
-                        tvArrow3.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        passageAutorise3 = false;
+                        verifArrow3 = false;
                     }
                     if (verifArrow4 == true) {
-                        ivArrow4.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
-                        tvArrow4.setText(sommets.get(i).getNomSommet());
-                        tvArrow4.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        passageAutorise4 = false;
+                        verifArrow4 = false;
                     }
                     if (verifArrow5 == true) {
-                        ivArrow5.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
-                        tvArrow5.setText(sommets.get(i).getNomSommet());
-                        tvArrow5.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
-                    }
-                }else{
-                    if(verifArrow1 == true){
-                        verifArrow1 = false;
-                    }else if(verifArrow2 == true){
-                        verifArrow2 = false;
-                    }else if(verifArrow3 == true){
-                        verifArrow3 = false;
-                    }else if(verifArrow4 == true){
-                        verifArrow4 = false;
-                    }else if(verifArrow5 == true){
                         verifArrow5 = false;
+                        passageAutorise5 = false;
                     }
+                    tourComplet = false;
                 }
-
-
             }
 
 
-        }
+                }
+
+
+
+
+
+
 
     }
 
@@ -250,12 +369,53 @@ public class MainActivity extends Activity {
         display.getSize(size);
         int tailleEcran = size.x;
 
-        int test = ivArrow.getWidth()/2;
+        int test = ivArrowNord.getWidth()/2;
 
-
-        if(xAxisDegrees>-30 && xAxisDegrees<30){
-            ivArrowNord.setX((xAxisDegrees*(-tailleEcran/60))+((tailleEcran/2)-test));
+        if(xAxisDegrees>=-30 && xAxisDegrees<30 && animationNord == null) {
+            animationNord = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.floatingnord);
+            animationNord.setRepeatCount(-1);
+            animationNord.setRepeatMode(2);
+            ivArrowNord.startAnimation(animationNord);
+            animationNordCote= null;
         }
+
+        if(xAxisDegrees>=-29 && xAxisDegrees<=29){
+            ivArrowNord.setX((xAxisDegrees * (-tailleEcran / 60)) + ((tailleEcran / 2) - test));
+            animationNordCote = null;
+
+        }
+
+        if(xAxisDegrees<=-30 && animationNordCote == null){
+
+            System.out.println("Animation gauche");
+
+            animationNordCote = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.floatingnordcote);
+            animationNordCote.setRepeatCount(-1);
+            animationNordCote.setRepeatMode(2);
+            ivArrowNord.startAnimation(animationNordCote);
+
+            ivArrowNord.setRotation(-90);
+
+            animationNordCote = null;
+        }
+
+        if(xAxisDegrees>=30 && animationNordCote == null){
+
+            System.out.println("Animation gauche");
+
+            animationNordCote= AnimationUtils.loadAnimation(getApplicationContext(), R.anim.floatingnordcote);
+            animationNordCote.setRepeatCount(-1);
+            animationNordCote.setRepeatMode(2);
+            ivArrowNord.startAnimation(animationNordCote);
+
+            ivArrowNord.setRotation(90);
+
+            animationNordCote = null;
+        }
+
+
+
+
 
     }
 
@@ -294,11 +454,7 @@ public class MainActivity extends Activity {
         tvArrow4 = (TextView) findViewById(R.id.textViewMont4);
         tvArrow5 = (TextView) findViewById(R.id.textViewMont5);
 
-        tvArrow1.bringToFront();
-        tvArrow2.bringToFront();
-        tvArrow3.bringToFront();
-        tvArrow4.bringToFront();
-        tvArrow5.bringToFront();
+
 
 
         tvLatLong.setText("Localisation par GPS en cours...");
