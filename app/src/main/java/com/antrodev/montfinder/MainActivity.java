@@ -81,14 +81,16 @@ public class MainActivity extends Activity {
 
         dbMan=SommetDatabaseHandler.getSommetDatabaseHandler(this);
 
-        dbMan.initializeValues();
-        sommets=dbMan.getSommets();
 
 
 
-        for(int i=0; i<sommets.size(); i++){
-            System.out.println("Sommets => " + sommets.get(i).getNomSommet());
+        if(dbMan.initializeValues()){
+            initializeSommets();
         }
+
+
+
+
 
 
         if (null == savedInstanceState) {
@@ -129,6 +131,14 @@ public class MainActivity extends Activity {
                 showLocation(intent);
             }
         };
+    }
+
+    private void initializeSommets(){
+        sommets = dbMan.getSommets();
+
+        for(int i=0; i<sommets.size(); i++){
+            System.out.println("Sommets => " + sommets.get(i).getNomSommet());
+        }
     }
 
     private void updateSommets(){
