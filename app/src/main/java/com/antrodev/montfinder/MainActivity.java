@@ -73,7 +73,9 @@ public class MainActivity extends Activity {
 
         dbMan=SommetDatabaseHandler.getSommetDatabaseHandler(this);
 
-        dbMan.initializeValues();
+        if(dbMan.initializeValues()){
+            initializeSommets();
+        }
 
 
 

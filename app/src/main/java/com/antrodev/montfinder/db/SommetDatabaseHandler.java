@@ -1,6 +1,7 @@
 package com.antrodev.montfinder.db;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -88,10 +89,13 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
 //        }
 //    }
 
-    public void initializeValues(){
+    public boolean initializeValues(){
         if(!initialized){
             SommetInsertionTask task=new SommetInsertionTask(context);
             task.execute(this);
+            return false;
+        } else{
+            return true;
         }
     }
 
