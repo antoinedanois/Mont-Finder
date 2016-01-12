@@ -70,7 +70,7 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
         initialized = false;
     }
 
-    private void addSommet(String correctQuery) {
+    protected void addSommet(String correctQuery) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         // Inserting Row
@@ -78,13 +78,20 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
         db.close(); // Closing database connection
     }
 
+//    public void initializeValues(){
+//        if(!initialized){
+//            addSommet("INSERT INTO sommets VALUES (1116621810, '6.84486789904718', '47.8224908948974', 'Ballon d''Alsace', 1247);");
+//            addSommet("INSERT INTO sommets VALUES (938282869, '6.7736388990571', '47.7672319948997', 'Planche des Belles Filles', 1148);");
+//            addSommet("INSERT INTO sommets VALUES (1762485578, '6.92214789903643', '47.7727801948995', 'Le Baerenkopf', 1074);");
+//            initialized=true;
+//            savePreferences();
+//        }
+//    }
+
     public void initializeValues(){
         if(!initialized){
-            addSommet("INSERT INTO sommets VALUES (1116621810, '6.84486789904718', '47.8224908948974', 'Ballon d''Alsace', 1247);");
-            addSommet("INSERT INTO sommets VALUES (938282869, '6.7736388990571', '47.7672319948997', 'Planche des Belles Filles', 1148);");
-            addSommet("INSERT INTO sommets VALUES (1762485578, '6.92214789903643', '47.7727801948995', 'Le Baerenkopf', 1074);");
-            initialized=true;
-            savePreferences();
+            SommetInsertionTask task=new SommetInsertionTask(context);
+            task.execute(this);
         }
     }
 
@@ -96,21 +103,23 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
     }
 
     public List<Sommet> getSommets(){
-        String query="SELECT * FROM sommets;";
-        List<Sommet> values=new ArrayList<>();
-        SQLiteDatabase db=getReadableDatabase();
-        Cursor cursor=db.query(TABLE_SOMMETS,new String[]{KEY_ID,KEY_LONGITUDE,KEY_LATITUDE,KEY_NOM,KEY_ALTITUDE},null,null,null,null,null);
-        if(cursor!=null){
-            cursor.moveToFirst();
-            do{
-                Sommet sommet = new Sommet(Long.valueOf(cursor.getString(0)), Double.valueOf(cursor.getString(1)),Double.valueOf(cursor.getString(2)), cursor.getString(3), Integer.valueOf(cursor.getString(4)));
-                values.add(sommet);
-            } while(cursor.moveToNext());
+        String query = "SELECT * FROM sommets;";
+        List<Sommet> values = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        if(initialized) {
+            Cursor cursor = db.query(TABLE_SOMMETS, new String[]{KEY_ID, KEY_LONGITUDE, KEY_LATITUDE, KEY_NOM, KEY_ALTITUDE}, null, null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                do {
+                    Sommet sommet = new Sommet(Long.valueOf(cursor.getString(0)), Double.valueOf(cursor.getString(1)), Double.valueOf(cursor.getString(2)), cursor.getString(3), Integer.valueOf(cursor.getString(4)));
+                    values.add(sommet);
+                } while (cursor.moveToNext());
+            }
         }
         return values;
     }
 
-    private void savePreferences(){
+    protected void savePreferences(){
         SharedPreferences.Editor editor=context.getSharedPreferences("Settings",Context.MODE_PRIVATE).edit();
         editor.putBoolean(KEY_INITIALIZED,initialized);
         editor.commit();
