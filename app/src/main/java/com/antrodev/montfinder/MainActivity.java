@@ -76,7 +76,7 @@ public class MainActivity extends Activity {
                 orientation = new float[]{intent.getFloatExtra(OrientationPrecise.CLEF_ORIENTATION_0, 0), intent.getFloatExtra(OrientationPrecise.CLEF_ORIENTATION_1,0), intent.getFloatExtra(OrientationPrecise.CLEF_ORIENTATION_2, 0)};
                 float xAxis = (float) (orientation[0]*180/Math.PI+90);
                 System.out.println("Boussole = " + xAxisDegrees);
-                tvLatLong.append("\nBoussole = " + xAxisDegrees);
+                tvLatLong.setText("Boussole = " + xAxisDegrees);
 
                 xAxisDegrees  = Math.round(xAxis);
             }

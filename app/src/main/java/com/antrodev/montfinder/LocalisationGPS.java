@@ -68,16 +68,20 @@ public class LocalisationGPS {
             System.out.println("Passage là");
 
 
-            if (ActivityCompat.checkSelfPermission(appContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(appContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                System.out.println("Passage ici");
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
 
-                return;
+                if (ActivityCompat.checkSelfPermission(appContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(appContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    System.out.println("Passage ici");
+
+                    return;
+                }else{
+                    System.out.println("Coucou");
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locl);
+                }
             }else{
-                System.out.println("Coucou");
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locl);
             }
-
 
             } catch (Exception e){
                 Log.e("LocalisationGPS","Erreur securite" + e);
