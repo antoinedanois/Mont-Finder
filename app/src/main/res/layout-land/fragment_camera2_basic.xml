@@ -80,12 +80,61 @@
         android:indeterminate="false" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:id="@+id/imageViewArrow"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"
+        android:src="@drawable/arrow"
+        android:layout_alignParentEnd="false" />
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/imageViewArrow2"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
         android:src="@drawable/arrow" />
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/imageViewArrow3"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:src="@drawable/arrow" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/textViewMont1"
+        android:layout_above="@+id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:textColor="#0000FF" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/textViewMont2"
+        android:layout_above="@+id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:textColor="#0000FF" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/textViewMont3"
+        android:layout_above="@+id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:textColor="#0000FF" />
 
 </RelativeLayout>

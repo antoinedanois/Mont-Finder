@@ -28,6 +28,8 @@ import android.widget.Toast;
 import com.antrodev.montfinder.db.Sommet;
 import com.antrodev.montfinder.db.SommetDatabaseHandler;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class MainActivity extends Activity {
@@ -45,6 +47,13 @@ public class MainActivity extends Activity {
 
 
     ImageView ivArrow = null;
+    ImageView ivArrow2 = null;
+    ImageView ivArrow3 = null;
+
+    TextView tvArrow1 = null;
+    TextView tvArrow2 = null;
+    TextView tvArrow3 = null;
+
     TextView tvLatLong = null;
     ProgressBar progressBar = null;
 
@@ -62,7 +71,7 @@ public class MainActivity extends Activity {
 
         dbMan=SommetDatabaseHandler.getSommetDatabaseHandler(this);
 
-        //dbMan.initializeValues();
+        dbMan.initializeValues();
         sommets=dbMan.getSommets();
 
 
@@ -91,7 +100,7 @@ public class MainActivity extends Activity {
                     xAxis-=360;
                 }
 
-                tvLatLong.setText("Boussole = " + xAxisDegrees);
+                //tvLatLong.setText("Boussole = " + xAxisDegrees);
 
                 xAxisDegrees  = Math.round(xAxis);
 
@@ -122,29 +131,48 @@ public class MainActivity extends Activity {
         int sizeImage = ivArrow.getWidth()/2;
 
 
+        for(int i=0; i<sommets.size(); i++){
 
 
 
-            Location loc = new Location(sommets.get(1).getNomSommet());
+            Location loc = new Location(sommets.get(i).getNomSommet());
 
-            loc.setLatitude(sommets.get(1).getLatitude());
-            loc.setLongitude(sommets.get(1).getLongitude());
-
-
-        if(localisation != null){
-
-            float locMontagne = localisation.bearingTo(loc);
+            loc.setLatitude(sommets.get(i).getLatitude());
+            loc.setLongitude(sommets.get(i).getLongitude());
 
 
-                if (xAxisDegrees > locMontagne-30 && xAxisDegrees < locMontagne+30) {
-                    ivArrow.setX((xAxisDegrees * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
-                    //Toast.makeText(getApplicationContext(), "Affichaaaaage", Toast.LENGTH_SHORT).show();
+            if (localisation != null) {
+
+                tvLatLong.setText("Boussole = " + xAxisDegrees);
+
+                float locMontagne = localisation.bearingTo(loc);
+
+
+                if(i==0){
+                    ivArrow.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                    tvArrow1.setText(sommets.get(i).getNomSommet());
+                    tvArrow1.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+
                 }
+                if(i==1){
+                    ivArrow2.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                    tvArrow2.setText(sommets.get(i).getNomSommet());
+                    tvArrow2.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                }
+                if(i==2){
+                    ivArrow3.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                    tvArrow3.setText(sommets.get(i).getNomSommet());
+                    tvArrow3.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                }
+
+
+                //Toast.makeText(getApplicationContext(), "Affichaaaaage", Toast.LENGTH_SHORT).show();
+
+
             }
 
 
-
-
+        }
 
     }
 
@@ -187,6 +215,13 @@ public class MainActivity extends Activity {
         tvLatLong = (TextView) findViewById(R.id.textViewLatLong);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         ivArrow = (ImageView) findViewById(R.id.imageViewArrow);
+        ivArrow2 = (ImageView) findViewById(R.id.imageViewArrow2);
+        ivArrow3 = (ImageView) findViewById(R.id.imageViewArrow3);
+
+        tvArrow1 = (TextView) findViewById(R.id.textViewMont1);
+        tvArrow2 = (TextView) findViewById(R.id.textViewMont2);
+        tvArrow3 = (TextView) findViewById(R.id.textViewMont3);
+
 
 
         tvLatLong.setText("Localisation par GPS en cours...");
