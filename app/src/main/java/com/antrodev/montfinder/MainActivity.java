@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
 
         dbMan=SommetDatabaseHandler.getSommetDatabaseHandler(this);
 
-        //dbMan.initializeValues();
+        dbMan.initializeValues();
         sommets=dbMan.getSommets();
 
 
@@ -75,6 +75,9 @@ public class MainActivity extends Activity {
             public void onReceive(Context context, Intent intent) {
                 orientation = new float[]{intent.getFloatExtra(OrientationPrecise.CLEF_ORIENTATION_0, 0), intent.getFloatExtra(OrientationPrecise.CLEF_ORIENTATION_1,0), intent.getFloatExtra(OrientationPrecise.CLEF_ORIENTATION_2, 0)};
                 float xAxis = (float) (orientation[0]*180/Math.PI+90);
+                if(xAxis>180){
+                    xAxis=xAxis-360;
+                }
                 System.out.println("Boussole = " + xAxisDegrees);
                 tvLatLong.setText("Boussole = " + xAxisDegrees);
 
