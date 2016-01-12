@@ -46,6 +46,9 @@ public class SommetInsertionTask extends AsyncTask<SommetDatabaseHandler,String,
                 "INSERT INTO sommets VALUES (2515145576, '7.02697749902184', '47.9475971948924', 'Breitfirst', 1280);",
                 "INSERT INTO sommets VALUES (634567985, '7.03879699902019', '47.9641508948917', 'Nonselkopf', 1257);",
                 "INSERT INTO sommets VALUES (634567965, '7.0394256990201', '47.956195994892', 'Lauchenkopf', 1314);",
+                "INSERT INTO sommets VALUES (938282869, '6.7736388990571', '47.7672319948997', 'Planche des Belles Filles', 1148);",
+                "INSERT INTO sommets VALUES (303919134, '6.01820239916226', '46.525902594954', 'Roche au Dade', 918);",
+                "INSERT INTO sommets VALUES (306394529, '6.09955459915094', '46.4256491949587', 'La Dôle', 1678);"
         };
 
         for(int i=0;i<queries.length;i++){
