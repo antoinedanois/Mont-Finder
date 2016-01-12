@@ -113,6 +113,7 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
     private void savePreferences(){
         SharedPreferences.Editor editor=context.getSharedPreferences("Settings",Context.MODE_PRIVATE).edit();
         editor.putBoolean(KEY_INITIALIZED,initialized);
+        editor.commit();
     }
 
     private void readPreferences(){
