@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.antrodev.montfinder.db.Sommet;
 import com.antrodev.montfinder.db.SommetDatabaseHandler;
-import com.antrodev.montfinder.db.SommetInsertionTask;
 
 import org.w3c.dom.Text;
 
@@ -38,7 +37,6 @@ public class MainActivity extends Activity {
 
     SommetDatabaseHandler dbMan;
     List<Sommet> sommets;
-    BroadcastReceiver DBStatusReceiver;
     LocalisationGPS lGPS = null;
     BroadcastReceiver br;
     OrientationPrecise op;
@@ -47,14 +45,24 @@ public class MainActivity extends Activity {
     float[] orientation;
     int xAxisDegrees;
 
-
+    ImageView ivArrowNord = null;
     ImageView ivArrow = null;
     ImageView ivArrow2 = null;
     ImageView ivArrow3 = null;
+    ImageView ivArrow4 = null;
+    ImageView ivArrow5 = null;
 
     TextView tvArrow1 = null;
     TextView tvArrow2 = null;
     TextView tvArrow3 = null;
+    TextView tvArrow4 = null;
+    TextView tvArrow5 = null;
+
+    boolean verifArrow1 = false;
+    boolean verifArrow2 = false;
+    boolean verifArrow3 = false;
+    boolean verifArrow4 = false;
+    boolean verifArrow5 = false;
 
     TextView tvLatLong = null;
     ProgressBar progressBar = null;
@@ -73,10 +81,14 @@ public class MainActivity extends Activity {
 
         dbMan=SommetDatabaseHandler.getSommetDatabaseHandler(this);
 
-        if(dbMan.initializeValues()){
-            initializeSommets();
-        }
+        dbMan.initializeValues();
+        sommets=dbMan.getSommets();
 
+
+
+        for(int i=0; i<sommets.size(); i++){
+            System.out.println("Sommets => " + sommets.get(i).getNomSommet());
+        }
 
 
         if (null == savedInstanceState) {
@@ -102,18 +114,12 @@ public class MainActivity extends Activity {
 
                 xAxisDegrees  = Math.round(xAxis);
 
-                //updateNord();
+                updateNord();
                 updateSommets();
 
             }
         };
 
-        DBStatusReceiver=new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                initializeSommets();
-            }
-        };
 
 
 
@@ -123,14 +129,6 @@ public class MainActivity extends Activity {
                 showLocation(intent);
             }
         };
-    }
-
-    private void initializeSommets(){
-        sommets=dbMan.getSommets();
-
-        for(int i=0; i<sommets.size(); i++){
-            System.out.println("FUHGQDFLJK " + sommets.get(i).getNomSommet());
-        }
     }
 
     private void updateSommets(){
@@ -159,26 +157,64 @@ public class MainActivity extends Activity {
 
                 float locMontagne = localisation.bearingTo(loc);
 
-
-                if(i==0){
-                    ivArrow.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
-                    tvArrow1.setText(sommets.get(i).getNomSommet());
-                    tvArrow1.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
-
+                if(verifArrow1 == false){
+                    verifArrow1 = true;
+                    tvArrow1.setVisibility(View.VISIBLE);
+                }else if(verifArrow2 == false){
+                    verifArrow2 = true;
+                    tvArrow2.setVisibility(View.VISIBLE);
+                }else if(verifArrow3 == false){
+                    verifArrow3 = true;
+                    tvArrow3.setVisibility(View.VISIBLE);
+                }else if(verifArrow4 == false){
+                    verifArrow4 = true;
+                    tvArrow4.setVisibility(View.VISIBLE);
+                }else if(verifArrow5 == false){
+                    verifArrow5 = true;
+                    tvArrow5.setVisibility(View.VISIBLE);
                 }
-                if(i==1){
-                    ivArrow2.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
-                    tvArrow2.setText(sommets.get(i).getNomSommet());
-                    tvArrow2.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
-                }
-                if(i==2){
-                    ivArrow3.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
-                    tvArrow3.setText(sommets.get(i).getNomSommet());
-                    tvArrow3.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
-                }
 
 
-                //Toast.makeText(getApplicationContext(), "Affichaaaaage", Toast.LENGTH_SHORT).show();
+                if(xAxisDegrees-locMontagne >= -30 && xAxisDegrees+locMontagne <= 30) {
+                    if (verifArrow1 == true) {
+                        ivArrow.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        tvArrow1.setText(sommets.get(i).getNomSommet());
+                        tvArrow1.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+
+                    }
+                    if (verifArrow2 == true) {
+                        ivArrow2.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        tvArrow2.setText(sommets.get(i).getNomSommet());
+                        tvArrow2.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                    }
+                    if (verifArrow3 == true) {
+                        ivArrow3.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        tvArrow3.setText(sommets.get(i).getNomSommet());
+                        tvArrow3.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                    }
+                    if (verifArrow4 == true) {
+                        ivArrow4.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        tvArrow4.setText(sommets.get(i).getNomSommet());
+                        tvArrow4.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                    }
+                    if (verifArrow5 == true) {
+                        ivArrow5.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        tvArrow5.setText(sommets.get(i).getNomSommet());
+                        tvArrow5.setX(((xAxisDegrees - locMontagne) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                    }
+                }else{
+                    if(verifArrow1 == true){
+                        verifArrow1 = false;
+                    }else if(verifArrow2 == true){
+                        verifArrow2 = false;
+                    }else if(verifArrow3 == true){
+                        verifArrow3 = false;
+                    }else if(verifArrow4 == true){
+                        verifArrow4 = false;
+                    }else if(verifArrow5 == true){
+                        verifArrow5 = false;
+                    }
+                }
 
 
             }
@@ -200,7 +236,7 @@ public class MainActivity extends Activity {
 
 
         if(xAxisDegrees>-30 && xAxisDegrees<30){
-            ivArrow.setX((xAxisDegrees*(-tailleEcran/60))+((tailleEcran/2)-test));
+            ivArrowNord.setX((xAxisDegrees*(-tailleEcran/60))+((tailleEcran/2)-test));
         }
 
     }
@@ -226,20 +262,30 @@ public class MainActivity extends Activity {
         registerReceiver(br, new IntentFilter(LocalisationGPS.ACTION_LOCATION));
         tvLatLong = (TextView) findViewById(R.id.textViewLatLong);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        ivArrowNord = (ImageView) findViewById(R.id.imageViewArrowNord);
+
         ivArrow = (ImageView) findViewById(R.id.imageViewArrow);
         ivArrow2 = (ImageView) findViewById(R.id.imageViewArrow2);
         ivArrow3 = (ImageView) findViewById(R.id.imageViewArrow3);
+        ivArrow4 = (ImageView) findViewById(R.id.imageViewArrow4);
+        ivArrow5 = (ImageView) findViewById(R.id.imageViewArrow5);
 
         tvArrow1 = (TextView) findViewById(R.id.textViewMont1);
         tvArrow2 = (TextView) findViewById(R.id.textViewMont2);
         tvArrow3 = (TextView) findViewById(R.id.textViewMont3);
+        tvArrow4 = (TextView) findViewById(R.id.textViewMont4);
+        tvArrow5 = (TextView) findViewById(R.id.textViewMont5);
 
+        tvArrow1.bringToFront();
+        tvArrow2.bringToFront();
+        tvArrow3.bringToFront();
+        tvArrow4.bringToFront();
+        tvArrow5.bringToFront();
 
 
         tvLatLong.setText("Localisation par GPS en cours...");
 
         registerReceiver(orientationReceiver, new IntentFilter(OrientationPrecise.MESSAGE_ORIENTATION));
-        registerReceiver(DBStatusReceiver,new IntentFilter(SommetInsertionTask.MESSAGE_TYPE));
         op.start();
     }
 
@@ -249,7 +295,6 @@ public class MainActivity extends Activity {
         unregisterReceiver(br);
 
         unregisterReceiver(orientationReceiver);
-        unregisterReceiver(DBStatusReceiver);
         op.stop();
     }
 

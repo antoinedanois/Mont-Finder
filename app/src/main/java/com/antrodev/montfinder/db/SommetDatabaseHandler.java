@@ -91,7 +91,7 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
 
     public boolean initializeValues(){
         if(!initialized){
-            SommetInsertionTask task=new SommetInsertionTask(context);
+            SommetInsertionTask task = new SommetInsertionTask(context);
             task.execute(this);
             return false;
         } else{
