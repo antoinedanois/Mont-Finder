@@ -39,6 +39,7 @@ public class MainActivity extends Activity {
     BroadcastReceiver br;
     OrientationPrecise op;
     BroadcastReceiver orientationReceiver;
+    Location localisation = null;
     float[] orientation;
     int xAxisDegrees;
 
@@ -94,7 +95,8 @@ public class MainActivity extends Activity {
 
                 xAxisDegrees  = Math.round(xAxis);
 
-                updateNord();
+                //updateNord();
+                updateSommets();
 
             }
         };
@@ -108,6 +110,42 @@ public class MainActivity extends Activity {
                 showLocation(intent);
             }
         };
+    }
+
+    private void updateSommets(){
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int tailleEcran = size.x;
+
+        int sizeImage = ivArrow.getWidth()/2;
+
+
+
+
+
+            Location loc = new Location(sommets.get(1).getNomSommet());
+
+            loc.setLatitude(sommets.get(1).getLatitude());
+            loc.setLongitude(sommets.get(1).getLongitude());
+
+
+        if(localisation != null){
+
+            float locMontagne = localisation.bearingTo(loc);
+
+
+                if (xAxisDegrees > locMontagne-30 && xAxisDegrees < locMontagne+30) {
+                    ivArrow.setX((xAxisDegrees * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                    //Toast.makeText(getApplicationContext(), "Affichaaaaage", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+
+
+
+
     }
 
     private void updateNord(){
@@ -135,6 +173,8 @@ public class MainActivity extends Activity {
 
             progressBar.setVisibility(View.INVISIBLE);
             tvLatLong.setText("Latitude = " + loc.getLatitude() + " Longitude = " + loc.getLongitude());
+            localisation = loc;
+
 
         }
     }

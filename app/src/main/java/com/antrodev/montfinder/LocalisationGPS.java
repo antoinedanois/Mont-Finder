@@ -41,7 +41,7 @@ public class LocalisationGPS {
                 @Override
                 public void onLocationChanged(Location location) {
                     if (location != null) {
-                        System.out.println("Passage là aussi" + location.getLatitude());
+
 
                         Log.d(this.getClass().getName(), location.toString());
                         broadcastLocation(location);
@@ -65,7 +65,8 @@ public class LocalisationGPS {
                 }
             };
 
-            System.out.println("Passage là");
+
+
 
 
             if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
@@ -76,7 +77,7 @@ public class LocalisationGPS {
 
                     return;
                 }else{
-                    System.out.println("Coucou");
+
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locl);
                 }
             }else{
