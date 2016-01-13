@@ -103,7 +103,6 @@ public class MainActivity extends Activity {
 
 
 
-
         if (null == savedInstanceState) {
             getFragmentManager().beginTransaction()
                     .replace(R.id.container, Camera2BasicFragment.newInstance())
