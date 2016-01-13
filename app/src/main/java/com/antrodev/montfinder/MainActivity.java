@@ -62,6 +62,7 @@ public class MainActivity extends Activity {
     ImageView ivArrow5 = null;
     ImageView ivLogo = null;
 
+
     TextView tvArrow1 = null;
     TextView tvArrow2 = null;
     TextView tvArrow3 = null;
@@ -387,7 +388,7 @@ public class MainActivity extends Activity {
             ivArrowNord.startAnimation(animationNord);
             animationNordCote= null;
             ivArrowNord.setRotation(0);
-            animationLancement();
+
         }
 
         if(xAxisDegrees>=-29 && xAxisDegrees<=29){
@@ -407,7 +408,7 @@ public class MainActivity extends Activity {
 
             ivArrowNord.setRotation(-90);
 
-            animationNordCote = null;
+            animationNord = null;
         }
 
         if(xAxisDegrees>=30 && animationNordCote == null){
@@ -423,6 +424,8 @@ public class MainActivity extends Activity {
 
             animationNord = null;
         }
+
+        animationLancement();
 
     }
 
@@ -443,6 +446,7 @@ public class MainActivity extends Activity {
     protected void animationLancement(){
         if(lancement == true) {
             ivLogo = (ImageView) findViewById(R.id.imageViewIconeLancement);
+
             lancementAnimIconeLancement = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.iconelancement);
             ivLogo.setAnimation(lancementAnimIconeLancement);
             lancement = false;
@@ -469,8 +473,6 @@ public class MainActivity extends Activity {
         tvArrow3 = (TextView) findViewById(R.id.textViewMont3);
         tvArrow4 = (TextView) findViewById(R.id.textViewMont4);
         tvArrow5 = (TextView) findViewById(R.id.textViewMont5);
-
-
 
 
         tvLatLong.setText("Localisation par GPS en cours...");

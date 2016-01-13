@@ -1,52 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:fillEnabled="true"
-    android:fillAfter="true">
-
-
-
+<set xmlns:android="http://schemas.android.com/apk/res/android" >
 
 
     <alpha xmlns:android="http://schemas.android.com/apk/res/android"
         android:fromAlpha="0.0"
         android:toAlpha="1.0"
-        android:duration="500"
-        android:repeatMode="reverse"
+        android:duration="400"
         />
 
-
-
     <translate
-        android:interpolator="@android:anim/linear_interpolator"
-        android:fromYDelta="-30%p"
-        android:toYDelta="0%p"
-        android:fromDegrees="0"
-        android:toDegrees="180"
-        android:duration="500"
-        android:startOffset="0"
-        android:repeatMode="reverse"></translate>
-
-
-    <alpha xmlns:android="http://schemas.android.com/apk/res/android"
-        android:fromAlpha="1.0"
-        android:toAlpha="0.0"
-        android:duration="500"
-        android:startOffset="2000"
-        android:repeatMode="reverse"
-        />
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+        android:fromYDelta="-100%"
+        android:toYDelta="10%"
+        android:duration="400"/>
 
 
 
-    <translate
-        android:interpolator="@android:anim/linear_interpolator"
-        android:fromYDelta="0%p"
-        android:toYDelta="-30%p"
-        android:fromDegrees="0"
-        android:toDegrees="180"
-        android:duration="500"
-        android:startOffset="0"
-        android:repeatMode="reverse"></translate>
+    <set android:interpolator="@android:anim/decelerate_interpolator">
 
 
-</set>
+
+            <alpha xmlns:android="http://schemas.android.com/apk/res/android"
+                android:fromAlpha="1.0"
+                android:toAlpha="0.0"
+                android:duration="500"
+                android:startOffset="2000"
+                android:fillBefore="false"
+                />
+
+
+
+            <translate
+                android:interpolator="@android:anim/linear_interpolator"
+                android:fromYDelta="10%"
+                android:toYDelta="-100%"
+                android:startOffset="2000"
+                android:duration="500"/>
+
+
+        <rotate
+            android:fromDegrees="0"
+            android:toDegrees="-90"
+            android:toYScale="0.0"
+            android:pivotX="50%"
+            android:pivotY="50%"
+            android:duration="1700"
+            android:startOffset="2000"/>
+
+
+        </set>
+    </set>
