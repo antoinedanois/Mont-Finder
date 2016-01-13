@@ -353,12 +353,6 @@ public class MainActivity extends Activity {
 
                 }
 
-
-
-
-
-
-
     }
 
     private void updateNord(){
@@ -377,17 +371,18 @@ public class MainActivity extends Activity {
             animationNord.setRepeatMode(2);
             ivArrowNord.startAnimation(animationNord);
             animationNordCote= null;
+            ivArrowNord.setRotation(0);
         }
 
         if(xAxisDegrees>=-29 && xAxisDegrees<=29){
             ivArrowNord.setX((xAxisDegrees * (-tailleEcran / 60)) + ((tailleEcran / 2) - test));
             animationNordCote = null;
-
+            ivArrowNord.setRotation(0);
         }
 
         if(xAxisDegrees<=-30 && animationNordCote == null){
 
-            System.out.println("Animation gauche");
+
 
             animationNordCote = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.floatingnordcote);
             animationNordCote.setRepeatCount(-1);
@@ -401,7 +396,7 @@ public class MainActivity extends Activity {
 
         if(xAxisDegrees>=30 && animationNordCote == null){
 
-            System.out.println("Animation gauche");
+
 
             animationNordCote= AnimationUtils.loadAnimation(getApplicationContext(), R.anim.floatingnordcote);
             animationNordCote.setRepeatCount(-1);
@@ -410,12 +405,8 @@ public class MainActivity extends Activity {
 
             ivArrowNord.setRotation(90);
 
-            animationNordCote = null;
+            animationNord = null;
         }
-
-
-
-
 
     }
 
