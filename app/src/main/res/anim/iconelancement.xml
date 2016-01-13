@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fillEnabled="true"
+    android:fillAfter="true">
+
+
+
+
+
+    <alpha xmlns:android="http://schemas.android.com/apk/res/android"
+        android:fromAlpha="0.0"
+        android:toAlpha="1.0"
+        android:duration="500"
+        android:repeatMode="reverse"
+        />
+
+
+
+    <translate
+        android:interpolator="@android:anim/linear_interpolator"
+        android:fromYDelta="-30%p"
+        android:toYDelta="0%p"
+        android:fromDegrees="0"
+        android:toDegrees="180"
+        android:duration="500"
+        android:startOffset="0"
+        android:repeatMode="reverse"></translate>
+
+
+    <alpha xmlns:android="http://schemas.android.com/apk/res/android"
+        android:fromAlpha="1.0"
+        android:toAlpha="0.0"
+        android:duration="500"
+        android:startOffset="2000"
+        android:repeatMode="reverse"
+        />
+
+
+
+    <translate
+        android:interpolator="@android:anim/linear_interpolator"
+        android:fromYDelta="0%p"
+        android:toYDelta="-30%p"
+        android:fromDegrees="0"
+        android:toDegrees="180"
+        android:duration="500"
+        android:startOffset="0"
+        android:repeatMode="reverse"></translate>
+
+
+</set>

@@ -10,6 +10,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.Image;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +51,8 @@ public class MainActivity extends Activity {
     int xAxisDegrees;
     Animation animationNord = null;
     Animation animationNordCote = null;
+    Animation lancementAnimIconeLancement = null;
+
 
     ImageView ivArrowNord = null;
     ImageView ivArrow = null;
@@ -57,6 +60,7 @@ public class MainActivity extends Activity {
     ImageView ivArrow3 = null;
     ImageView ivArrow4 = null;
     ImageView ivArrow5 = null;
+    ImageView ivLogo = null;
 
     TextView tvArrow1 = null;
     TextView tvArrow2 = null;
@@ -69,6 +73,7 @@ public class MainActivity extends Activity {
     boolean verifArrow3 = false;
     boolean verifArrow4 = false;
     boolean verifArrow5 = false;
+    boolean lancement = true;
 
     float locMontagne1 = 0;
     float locMontagne2 = 0;
@@ -86,6 +91,14 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_camera);
 
         tvLatLong = (TextView) findViewById(R.id.textViewLatLong);
+
+
+
+        //lancementAnimIconeLancement = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.iconelancement);
+
+        //ivAnimationLancement.startAnimation(lancementAnimIconeLancement);
+
+
 
         lGPS = LocalisationGPS.get(this.getApplicationContext());
         lGPS.startLocationUpdates();
@@ -147,6 +160,10 @@ public class MainActivity extends Activity {
                 showLocation(intent);
             }
         };
+
+
+
+
     }
 
     private void initializeSommets(){
@@ -370,6 +387,7 @@ public class MainActivity extends Activity {
             ivArrowNord.startAnimation(animationNord);
             animationNordCote= null;
             ivArrowNord.setRotation(0);
+            animationLancement();
         }
 
         if(xAxisDegrees>=-29 && xAxisDegrees<=29){
@@ -422,9 +440,18 @@ public class MainActivity extends Activity {
         }
     }
 
+    protected void animationLancement(){
+        if(lancement == true) {
+            ivLogo = (ImageView) findViewById(R.id.imageViewIconeLancement);
+            lancementAnimIconeLancement = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.iconelancement);
+            ivLogo.setAnimation(lancementAnimIconeLancement);
+            lancement = false;
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();
+
         LocalisationGPS.get(this).startLocationUpdates();
         registerReceiver(br, new IntentFilter(LocalisationGPS.ACTION_LOCATION));
         tvLatLong = (TextView) findViewById(R.id.textViewLatLong);
