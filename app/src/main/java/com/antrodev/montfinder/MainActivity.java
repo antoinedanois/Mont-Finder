@@ -108,13 +108,9 @@ public class MainActivity extends Activity {
         dbMan=SommetDatabaseHandler.getSommetDatabaseHandler(this);
 
 
-
-
         if(dbMan.initializeValues()){
             initializeSommets();
         }
-
-
 
 
         if (null == savedInstanceState) {
@@ -140,8 +136,11 @@ public class MainActivity extends Activity {
 
                 xAxisDegrees  = Math.round(xAxis);
 
+
                 updateNord();
-                updateSommets();
+                if(sommets.isEmpty()) {
+                    updateSommets();
+                }
 
             }
         };
