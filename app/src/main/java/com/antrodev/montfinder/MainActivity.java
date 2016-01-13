@@ -381,7 +381,7 @@ public class MainActivity extends Activity {
         int test = ivArrowNord.getWidth()/2;
 
         if(xAxisDegrees>=-30 && xAxisDegrees<30 && animationNord == null) {
-            animationNord = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.floatingnord);
+            animationNord = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.floatingnorddroit);
             animationNord.setRepeatCount(-1);
             animationNord.setRepeatMode(2);
             ivArrowNord.startAnimation(animationNord);
