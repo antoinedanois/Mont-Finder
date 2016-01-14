@@ -79,15 +79,6 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
         db.close(); // Closing database connection
     }
 
-//    public void initializeValues(){
-//        if(!initialized){
-//            addSommet("INSERT INTO sommets VALUES (1116621810, '6.84486789904718', '47.8224908948974', 'Ballon d''Alsace', 1247);");
-//            addSommet("INSERT INTO sommets VALUES (938282869, '6.7736388990571', '47.7672319948997', 'Planche des Belles Filles', 1148);");
-//            addSommet("INSERT INTO sommets VALUES (1762485578, '6.92214789903643', '47.7727801948995', 'Le Baerenkopf', 1074);");
-//            initialized=true;
-//            savePreferences();
-//        }
-//    }
 
     public boolean initializeValues(){
         if(!initialized){
@@ -125,7 +116,7 @@ public class SommetDatabaseHandler extends SQLiteOpenHelper{
 
     protected void savePreferences(){
         SharedPreferences.Editor editor=context.getSharedPreferences("Settings",Context.MODE_PRIVATE).edit();
-        editor.putBoolean(KEY_INITIALIZED,initialized);
+        editor.putBoolean(KEY_INITIALIZED,true);
         editor.commit();
     }
 

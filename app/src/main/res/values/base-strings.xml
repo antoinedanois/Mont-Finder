@@ -16,14 +16,14 @@
 -->
 
 <resources>
-    <string name="app_name">Mont Finder</string>
+    <string name="app_name">Easy Mountain</string>
     <string name="intro_message">
         <![CDATA[
-        
-            
+
+
             This app shows...
-            
-        
+
+
         ]]>
     </string>
 </resources>

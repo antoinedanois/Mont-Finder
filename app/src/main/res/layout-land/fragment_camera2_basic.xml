@@ -148,7 +148,7 @@
         android:layout_centerHorizontal="true"
         android:textColor="#0000FF"
         android:visibility="invisible"
-        android:text="choucroute" />
+        android:background="#FFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -158,7 +158,8 @@
         android:layout_above="@+id/progressBar"
         android:layout_centerHorizontal="true"
         android:textColor="#0000FF"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:background="#FFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -168,7 +169,8 @@
         android:layout_above="@+id/progressBar"
         android:layout_centerHorizontal="true"
         android:textColor="#0000FF"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:background="#FFFFFF" />
 
 
     <TextView
@@ -179,7 +181,8 @@
         android:layout_above="@+id/progressBar"
         android:layout_centerHorizontal="true"
         android:textColor="#0000FF"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:background="#FFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -189,7 +192,8 @@
         android:layout_above="@+id/progressBar"
         android:layout_centerHorizontal="true"
         android:textColor="#0000FF"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:background="#FFFFFF" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/linearLayout1"
@@ -205,6 +209,38 @@
         android:layout_above="@+id/textViewMont1"
         android:layout_centerHorizontal="true"
         android:src="@drawable/ic_launcher"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/imageViewAccesReglage"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/reglage" />
+
+    <SeekBar
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBarAngle"
+        android:layout_marginTop="10dp"
+        android:layout_alignTop="@+id/imageViewAccesReglage"
+        android:layout_toEndOf="@+id/imageViewAccesReglage"
+        android:background="#FFF"
+        android:max="40"
+        android:indeterminate="false"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/textViewAngleCamera"
+        android:layout_alignBottom="@+id/seekBarAngle"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/imageViewArrow"
+        android:textColor="#FFF"
         android:visibility="invisible" />
 
 </RelativeLayout>

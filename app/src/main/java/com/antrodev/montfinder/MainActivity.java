@@ -1,46 +1,50 @@
 package com.antrodev.montfinder;
 
+
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.os.Handler;
+import android.support.v13.app.FragmentCompat;
+import android.support.v4.app.ActivityCompat;
 import android.view.Display;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.antrodev.montfinder.db.Sommet;
 import com.antrodev.montfinder.db.SommetDatabaseHandler;
 import com.antrodev.montfinder.db.SommetInsertionTask;
 
-import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends Activity {
 
+    public static final String PREFS_NAME = "ANGLECAMERASHAREDPREF";
 
     SommetDatabaseHandler dbMan;
-    List<Sommet> sommets;
+    List<Sommet> sommets = new ArrayList<>();
     BroadcastReceiver DBStatusReceiver;
     LocalisationGPS lGPS = null;
     BroadcastReceiver br;
@@ -52,6 +56,10 @@ public class MainActivity extends Activity {
     Animation animationNord = null;
     Animation animationNordCote = null;
     Animation lancementAnimIconeLancement = null;
+    Animation animationParametre = null;
+    Animation animationParametreFadeOut = null;
+    Animation animationParametreFadeIn = null;
+    public int valeurAngleCamera = 60;
 
 
     ImageView ivArrowNord = null;
@@ -84,6 +92,9 @@ public class MainActivity extends Activity {
 
     TextView tvLatLong = null;
     ProgressBar progressBar = null;
+    SeekBar seekBarAngle = null;
+    ImageView parametreAngle = null;
+    TextView tvAngle = null;
 
 
     @Override
@@ -95,9 +106,8 @@ public class MainActivity extends Activity {
 
 
 
-        //lancementAnimIconeLancement = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.iconelancement);
-
-        //ivAnimationLancement.startAnimation(lancementAnimIconeLancement);
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        valeurAngleCamera = settings.getInt("angleCamera", 60);
 
 
 
@@ -111,6 +121,21 @@ public class MainActivity extends Activity {
         if(dbMan.initializeValues()){
             initializeSommets();
         }
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(sommets.isEmpty()){
+                    dbMan=SommetDatabaseHandler.getSommetDatabaseHandler(getParent());
+                    if(dbMan.initializeValues()){
+                        initializeSommets();
+                    }
+                }
+            }
+        }, 4000);
+
+
 
 
         if (null == savedInstanceState) {
@@ -138,7 +163,7 @@ public class MainActivity extends Activity {
 
 
                 updateNord();
-                if(sommets.isEmpty()) {
+                if(sommets!=null) {
                     updateSommets();
                 }
 
@@ -152,17 +177,12 @@ public class MainActivity extends Activity {
             }
         };
 
-
-
         br=new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 showLocation(intent);
             }
         };
-
-
-
 
     }
 
@@ -199,10 +219,12 @@ public class MainActivity extends Activity {
 
             if (localisation != null) {
 
-                tvLatLong.setText("Boussole = " + xAxisDegrees);
 
 
-                if (verifArrow1 == false) {
+                tvLatLong.setText(getCompass());
+
+
+                if (!verifArrow1) {
                     Location loc1 = new Location(sommets.get(i).getNomSommet());
 
 
@@ -221,7 +243,7 @@ public class MainActivity extends Activity {
                     } else {
                         placeLibre = true;
                     }
-                } else if (verifArrow2 == false) {
+                } else if (!verifArrow2) {
 
                     Location loc2 = new Location(sommets.get(i).getNomSommet());
 
@@ -241,7 +263,7 @@ public class MainActivity extends Activity {
                         placeLibre = true;
                     }
 
-                } else if (verifArrow3 == false) {
+                } else if (!verifArrow3) {
                     Location loc3 = new Location(sommets.get(i).getNomSommet());
 
 
@@ -258,7 +280,7 @@ public class MainActivity extends Activity {
                     } else {
                         placeLibre = true;
                     }
-                } else if (verifArrow4 == false) {
+                } else if (!verifArrow4) {
                     Location loc4 = new Location(sommets.get(i).getNomSommet());
 
 
@@ -278,7 +300,7 @@ public class MainActivity extends Activity {
                         placeLibre = true;
                     }
 
-                } else if (verifArrow5 == false) {
+                } else if (!verifArrow5) {
                     Location loc5 = new Location(sommets.get(i).getNomSommet());
 
 
@@ -306,58 +328,56 @@ public class MainActivity extends Activity {
 
 
                 if (placeLibre == false) {
-                    if (verifArrow1 == true && passageAutorise1 == true) {
-                        ivArrow.setX(((xAxisDegrees - locMontagne1) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                    if (verifArrow1 && passageAutorise1) {
+                        ivArrow.setX(((xAxisDegrees - locMontagne1) * (-tailleEcran / valeurAngleCamera)) + ((tailleEcran / 2) - sizeImage));
                         tvArrow1.setText("1 = " + sommets.get(0).getNomSommet());
-                        tvArrow1.setX(((xAxisDegrees - locMontagne1) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        tvArrow1.setX(((xAxisDegrees - locMontagne1) * (-tailleEcran / valeurAngleCamera)) + ((tailleEcran / 2) - sizeImage));
                         //System.out.println("1 = " + sommets.get(i).getNomSommet());
                         passageAutorise1 = false;
-                    } else if (verifArrow2 == true && passageAutorise2 == true) {
-                        ivArrow2.setX(((xAxisDegrees - locMontagne2) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                    } else if (verifArrow2 && passageAutorise2) {
+                        ivArrow2.setX(((xAxisDegrees - locMontagne2) * (-tailleEcran / valeurAngleCamera)) + ((tailleEcran / 2) - sizeImage));
                         tvArrow2.setText("2 = " + sommets.get(i).getNomSommet());
-                        tvArrow2.setX(((xAxisDegrees - locMontagne2) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        tvArrow2.setX(((xAxisDegrees - locMontagne2) * (-tailleEcran / valeurAngleCamera)) + ((tailleEcran / 2) - sizeImage));
                         passageAutorise2 = false;
-
-                        //System.out.println("2 = " + sommets.get(23).getNomSommet());
-                    } else if (verifArrow3 == true && passageAutorise3 == true) {
-                        ivArrow3.setX(((xAxisDegrees - locMontagne3) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                    } else if (verifArrow3 && passageAutorise3) {
+                        ivArrow3.setX(((xAxisDegrees - locMontagne3) * (-tailleEcran / valeurAngleCamera)) + ((tailleEcran / 2) - sizeImage));
                         tvArrow3.setText("3 = " + sommets.get(i).getNomSommet());
-                        tvArrow3.setX(((xAxisDegrees - locMontagne3) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        tvArrow3.setX(((xAxisDegrees - locMontagne3) * (-tailleEcran / valeurAngleCamera)) + ((tailleEcran / 2) - sizeImage));
                         passageAutorise3 = false;
-                    } else if (verifArrow4 == true && passageAutorise4 == true) {
-                        ivArrow4.setX(((xAxisDegrees - locMontagne4) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                    } else if (verifArrow4 && passageAutorise4) {
+                        ivArrow4.setX(((xAxisDegrees - locMontagne4) * (-tailleEcran / valeurAngleCamera)) + ((tailleEcran / 2) - sizeImage));
                         tvArrow4.setText("4 = " + sommets.get(i).getNomSommet());
-                        tvArrow4.setX(((xAxisDegrees - locMontagne4) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        tvArrow4.setX(((xAxisDegrees - locMontagne4) * (-tailleEcran / valeurAngleCamera)) + ((tailleEcran / 2) - sizeImage));
 
                         passageAutorise4 = false;
-                    } else if (verifArrow5 == true && passageAutorise5 == true) {
-                        ivArrow5.setX(((xAxisDegrees - locMontagne5) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                    } else if (verifArrow5 && passageAutorise5) {
+                        ivArrow5.setX(((xAxisDegrees - locMontagne5) * (-tailleEcran / valeurAngleCamera)) + ((tailleEcran / 2) - sizeImage));
                         tvArrow5.setText("5 = " + sommets.get(i).getNomSommet());
-                        tvArrow5.setX(((xAxisDegrees - locMontagne5) * (-tailleEcran / 60)) + ((tailleEcran / 2) - sizeImage));
+                        tvArrow5.setX(((xAxisDegrees - locMontagne5) * (-tailleEcran / valeurAngleCamera)) + ((tailleEcran / 2) - sizeImage));
 
                         passageAutorise5 = false;
                         tourComplet = true;
                     }
                 }
 
-                if (tourComplet == true) {
-                    if (verifArrow1 == true) {
+                if (tourComplet) {
+                    if (verifArrow1) {
                         verifArrow1 = false;
                         passageAutorise1 = false;
                     }
-                    if (verifArrow2 == true) {
+                    if (verifArrow2) {
                         verifArrow2 = false;
                         passageAutorise2 = false;
                     }
-                    if (verifArrow3 == true) {
+                    if (verifArrow3) {
                         passageAutorise3 = false;
                         verifArrow3 = false;
                     }
-                    if (verifArrow4 == true) {
+                    if (verifArrow4) {
                         passageAutorise4 = false;
                         verifArrow4 = false;
                     }
-                    if (verifArrow5 == true) {
+                    if (verifArrow5) {
                         verifArrow5 = false;
                         passageAutorise5 = false;
                     }
@@ -386,13 +406,17 @@ public class MainActivity extends Activity {
             animationNord.setRepeatMode(2);
             ivArrowNord.startAnimation(animationNord);
             animationNordCote= null;
-            ivArrowNord.setRotation(0);
 
+            ivArrowNord.setImageResource(R.drawable.arrownord);
+
+            ivArrowNord.setRotation(0);
         }
 
         if(xAxisDegrees>=-29 && xAxisDegrees<=29){
-            ivArrowNord.setX((xAxisDegrees * (-tailleEcran / 60)) + ((tailleEcran / 2) - test));
+            ivArrowNord.setX((xAxisDegrees * (-tailleEcran / valeurAngleCamera)) + ((tailleEcran / 2) - test));
             animationNordCote = null;
+            ivArrowNord.setImageResource(R.drawable.arrownord);
+
             ivArrowNord.setRotation(0);
         }
 
@@ -405,13 +429,13 @@ public class MainActivity extends Activity {
             animationNordCote.setRepeatMode(2);
             ivArrowNord.startAnimation(animationNordCote);
 
-            ivArrowNord.setRotation(-90);
 
+            ivArrowNord.setImageResource(R.drawable.arrownordcote);
+            ivArrowNord.setRotation(0);
             animationNord = null;
         }
 
         if(xAxisDegrees>=30 && animationNordCote == null){
-
 
 
             animationNordCote= AnimationUtils.loadAnimation(getApplicationContext(), R.anim.floatingnordcote);
@@ -419,8 +443,9 @@ public class MainActivity extends Activity {
             animationNordCote.setRepeatMode(2);
             ivArrowNord.startAnimation(animationNordCote);
 
-            ivArrowNord.setRotation(90);
 
+            ivArrowNord.setImageResource(R.drawable.arrownordcote);
+            ivArrowNord.setRotation(180);
             animationNord = null;
         }
 
@@ -443,7 +468,7 @@ public class MainActivity extends Activity {
     }
 
     protected void animationLancement(){
-        if(lancement == true) {
+        if(lancement) {
             ivLogo = (ImageView) findViewById(R.id.imageViewIconeLancement);
 
             lancementAnimIconeLancement = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.iconelancement);
@@ -451,6 +476,71 @@ public class MainActivity extends Activity {
             lancement = false;
         }
     }
+
+    protected void animationParametre(){
+        animationParametre = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotatesetting);
+        animationParametreFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadein);
+        animationParametreFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadeout);
+
+        parametreAngle.setAnimation(animationParametre);
+
+        if(tvAngle.getVisibility() == View.INVISIBLE){
+            tvAngle.setText("Angle de la caméra : " + valeurAngleCamera + "°");
+            seekBarAngle.setProgress(valeurAngleCamera - 40);
+            seekBarAngle.setAnimation(animationParametreFadeIn);
+            tvAngle.setAnimation(animationParametreFadeIn);
+
+
+            seekBarAngle.setVisibility(View.VISIBLE);
+            tvAngle.setVisibility(View.VISIBLE);
+        }else{
+            seekBarAngle.setAnimation(animationParametreFadeOut);
+            tvAngle.setAnimation(animationParametreFadeOut);
+
+
+            seekBarAngle.setVisibility(View.INVISIBLE);
+            tvAngle.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private String getCompass() {
+        String degrees="";
+        String dir="N";
+        int absValDegrees=xAxisDegrees;
+
+        if(xAxisDegrees>5){
+            dir="NE";
+            if(xAxisDegrees>85){
+                dir="SE";
+                if(xAxisDegrees<95){
+                    dir="E";
+                }
+                if(xAxisDegrees>168){
+                    dir="S";
+                }
+            }
+        } else if(xAxisDegrees<-5){
+            dir="NO";
+            if(xAxisDegrees<-85){
+                dir="SO";
+                if(xAxisDegrees>-95){
+                    dir="O";
+                }
+                if(xAxisDegrees<-168){
+                    dir="S";
+                }
+            }
+        }
+
+        if(absValDegrees<0){
+            absValDegrees=-absValDegrees;
+        }
+
+        degrees=absValDegrees+"° "+dir;
+
+        return degrees;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -473,12 +563,70 @@ public class MainActivity extends Activity {
         tvArrow4 = (TextView) findViewById(R.id.textViewMont4);
         tvArrow5 = (TextView) findViewById(R.id.textViewMont5);
 
+        seekBarAngle = (SeekBar) findViewById(R.id.seekBarAngle);
+        tvAngle = (TextView) findViewById(R.id.textViewAngleCamera);
+        parametreAngle = (ImageView) findViewById(R.id.imageViewAccesReglage);
+
+
+        parametreAngle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                animationParametre();
+
+
+            }
+        });
+
+
+        seekBarAngle.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChange = 0;
+            int prog = 0;
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChange = progress+40;
+                tvAngle.setText("Angle de la caméra : " + progressChange + "°");
+                valeurAngleCamera = progressChange;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                prog = progressChange;
+                tvAngle.setText("Angle de la caméra : " + prog + "°");
+                valeurAngleCamera = prog;
+            }
+        });
+
+
 
         tvLatLong.setText("Localisation par GPS en cours...");
 
         registerReceiver(orientationReceiver, new IntentFilter(OrientationPrecise.MESSAGE_ORIENTATION));
         registerReceiver(DBStatusReceiver, new IntentFilter(SommetInsertionTask.MESSAGE_TYPE));
         op.start();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestCameraPermission();
+                return;
+            }
+        }
+    }
+
+
+    private void requestCameraPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            new ConfirmationDialog().onCreateDialog();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1);
+        }
     }
 
     @Override
@@ -486,15 +634,17 @@ public class MainActivity extends Activity {
         super.onPause();
         unregisterReceiver(br);
 
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt("angleCamera", valeurAngleCamera);
+
+        // Commit the edits!
+        editor.commit();
+
         unregisterReceiver(orientationReceiver);
         unregisterReceiver(DBStatusReceiver);
         op.stop();
     }
 
-
-
-
-
-
-
 }
+

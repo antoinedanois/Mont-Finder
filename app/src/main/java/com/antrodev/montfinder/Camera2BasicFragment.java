@@ -422,7 +422,7 @@ public class Camera2BasicFragment extends Fragment
         // the SurfaceTextureListener).
         if (mTextureView.isAvailable()) {
             openCamera(mTextureView.getWidth(), mTextureView.getHeight());
-            System.out.println("HOOOOOOO" + mTextureView.getWidth() + mTextureView.getHeight());
+
         } else {
             mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
@@ -522,7 +522,7 @@ public class Camera2BasicFragment extends Fragment
                 int maxPreviewWidth = displaySize.x;
                 int maxPreviewHeight = displaySize.y;
 
-                System.out.println("HOOOOO" + displaySize.x + " prout " + displaySize.y);
+
 
                 if (swappedDimensions) {
                     rotatedPreviewWidth = height;
