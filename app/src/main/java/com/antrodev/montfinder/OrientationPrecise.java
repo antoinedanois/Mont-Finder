@@ -373,10 +373,6 @@ public class OrientationPrecise implements SensorEventListener{
             message_pour_activite_parent.putExtra(OrientationPrecise.CLEF_ORIENTATION_1, fusedOrientation[1]);
             message_pour_activite_parent.putExtra(OrientationPrecise.CLEF_ORIENTATION_2, fusedOrientation[2]);
 
-//            message_pour_activite_parent.putExtra(OrientationPrecise.CLEF_ORIENTATION_0, magnet[0]);
-//            message_pour_activite_parent.putExtra(OrientationPrecise.CLEF_ORIENTATION_1, magnet[1]);
-//            message_pour_activite_parent.putExtra(OrientationPrecise.CLEF_ORIENTATION_2, magnet[2]);
-
             context.sendBroadcast(message_pour_activite_parent);
         }
     }
